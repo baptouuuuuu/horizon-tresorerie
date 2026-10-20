@@ -4,7 +4,7 @@ Application web monofichier (HTML + CSS + JS, sans dépendance) de prévision de
 
 ## Fonctionnalités
 
-- Projection quotidienne du solde sur un graphique canvas (zoom molette, déplacement par glisser-déposer)
+- Projection quotidienne du solde et barres de revenus/dépenses sur un graphique canvas (zoom molette, déplacement par glisser-déposer)
 - Cartes de synthèse (solde, revenus, dépenses, solde minimum)
 - Opérations ponctuelles, tous les N jours ou mensuelles, avec date de fin optionnelle
 - Recherche et filtres, thème clair/sombre
