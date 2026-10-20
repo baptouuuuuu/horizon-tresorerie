@@ -1,0 +1,10 @@
+{
+  "application": "Horizon",
+  "version": 1,
+  "exportedAt": "2026-10-20T12:00:00.000Z",
+  "transactions": [
+    {"id": "t-salaire", "type": "income", "label": "Salaire", "amount": 2500, "startDate": "2026-10-28", "recurrence": "monthly", "intervalDays": null, "monthlyDay": 28, "endDate": null, "createdAt": "2026-10-20T12:00:00.000Z", "updatedAt": "2026-10-20T12:00:00.000Z"},
+    {"id": "t-loyer", "type": "expense", "label": "Loyer", "amount": 800, "startDate": "2026-11-05", "recurrence": "monthly", "intervalDays": null, "monthlyDay": 5, "endDate": null, "createdAt": "2026-10-20T12:00:00.000Z", "updatedAt": "2026-10-20T12:00:00.000Z"},
+    {"id": "t-courses", "type": "expense", "label": "Courses", "amount": 60, "startDate": "2026-10-21", "recurrence": "days", "intervalDays": 7, "monthlyDay": null, "endDate": null, "createdAt": "2026-10-20T12:00:00.000Z", "updatedAt": "2026-10-20T12:00:00.000Z"}
+  ]
+}
