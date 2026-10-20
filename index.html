@@ -154,17 +154,22 @@ function occurrences(t,from,to){
   return res;
 }
 function project(days){
-  var start=todayMs(),end=start+days*DAY,delta={};
+  var start=todayMs(),end=start+days*DAY,delta={},flows={};
   var inc=0,exp=0;
   state.transactions.forEach(function(t){
     occurrences(t,start,end).forEach(function(d){
       var v=t.type==='income'?t.amount:-t.amount;
       delta[d]=(delta[d]||0)+v;
+      if(!flows[d])flows[d]={inc:0,exp:0};
+      if(v>0)flows[d].inc+=v;else flows[d].exp-=v;
       if(v>0)inc+=v;else exp-=v;
     });
   });
   var pts=[],bal=state.initial;
-  for(var i=0;i<=days;i++){bal+=delta[start+i*DAY]||0;pts.push({t:start+i*DAY,v:bal})}
+  for(var i=0;i<=days;i++){
+    var t=start+i*DAY,f=flows[t]||{inc:0,exp:0};
+    bal+=delta[t]||0;pts.push({t:t,v:bal,inc:f.inc,exp:f.exp});
+  }
   return {pts:pts,inc:inc,exp:exp};
 }
 
@@ -192,10 +197,24 @@ function draw(){
   var vis=pts.slice(a,b+1);if(vis.length<2)return;
   var mn=Math.min(0,Math.min.apply(null,vis.map(function(p){return p.v}))),mx=Math.max(0,Math.max.apply(null,vis.map(function(p){return p.v})));
   if(mx===mn)mx=mn+1;
-  var L=70,R=12,T=12,B=26,pw=w-L-R,ph=h-T-B;
+  var L=70,R=12,T=24,B=26,pw=w-L-R,barH=58,gap=18,ph=h-T-B-barH-gap;
+  if(ph<60){barH=Math.max(32,h-T-B-60-gap);ph=h-T-B-barH-gap}
+  var flowTop=T+ph+gap,flowZero=flowTop+barH/2;
   var X=function(i){return L+(i-view.start)/view.span*pw},Y=function(v){return T+(mx-v)/(mx-mn)*ph};
   g.font='11px system-ui';g.fillStyle=col('--muted');g.strokeStyle=col('--border');g.lineWidth=1;
   for(var k=0;k<=4;k++){var v=mn+(mx-mn)*k/4,y=Y(v);g.beginPath();g.moveTo(L,y);g.lineTo(w-R,y);g.stroke();g.textAlign='right';g.fillText(eur(v),L-6,y+4)}
+  var maxFlow=1;
+  for(var q=a;q<=b;q++)maxFlow=Math.max(maxFlow,pts[q].inc,pts[q].exp);
+  var maxBar=barH/2-3,dayWidth=pw/view.span,barWidth=Math.max(.5,Math.min(8,dayWidth*.36));
+  g.fillStyle=col('--muted');g.textAlign='left';g.fillText('Flux quotidiens',L,flowTop-5);
+  g.fillStyle=col('--inc');g.fillRect(L+92,flowTop-13,8,8);g.fillText('Revenus',L+104,flowTop-5);
+  g.fillStyle=col('--exp');g.fillRect(L+158,flowTop-13,8,8);g.fillText('Dépenses',L+170,flowTop-5);
+  g.strokeStyle=col('--border');g.beginPath();g.moveTo(L,flowZero);g.lineTo(w-R,flowZero);g.stroke();
+  for(var f=a;f<=b;f++){
+    var cx=X(f),incomeHeight=pts[f].inc/maxFlow*maxBar,expenseHeight=pts[f].exp/maxFlow*maxBar;
+    if(incomeHeight>0){g.fillStyle=col('--inc');g.fillRect(cx-barWidth,flowZero-incomeHeight,barWidth,incomeHeight)}
+    if(expenseHeight>0){g.fillStyle=col('--exp');g.fillRect(cx,flowZero,barWidth,expenseHeight)}
+  }
   var ticks=Math.max(1,Math.floor(pw/90));g.textAlign='center';
   for(var j=0;j<=ticks;j++){var idx=Math.round(a+(b-a)*j/ticks);g.fillText(iso(new Date(pts[idx].t)).slice(5).split('-').reverse().join('/'),X(idx),h-8)}
   g.strokeStyle=col('--exp');g.setLineDash([4,4]);g.beginPath();g.moveTo(L,Y(0));g.lineTo(w-R,Y(0));g.stroke();g.setLineDash([]);
