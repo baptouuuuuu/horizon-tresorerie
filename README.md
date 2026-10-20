@@ -20,9 +20,7 @@ de l'utilisateur ne sont jamais écrasées.
 
 ## Déploiement GitHub Pages
 
-Le workflow `.github/workflows/deploy-pages.yml` déploie `index.html` et le fichier JSON à
-chaque push sur `main` (ou manuellement via `workflow_dispatch`).
-
-**À faire une fois :** activer Pages dans *Settings > Pages > Source = GitHub Actions*.
+Le workflow `.github/workflows/deploy-pages.yml` active GitHub Pages si nécessaire, puis déploie
+`index.html` et le fichier JSON à chaque push sur `main` (ou manuellement via `workflow_dispatch`).
 
 Pour tester en local : `python3 -m http.server` puis ouvrir `http://localhost:8000`.
