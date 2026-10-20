@@ -206,9 +206,8 @@ function draw(){
   var maxFlow=1;
   for(var q=a;q<=b;q++)maxFlow=Math.max(maxFlow,pts[q].inc,pts[q].exp);
   var maxBar=barH/2-3,dayWidth=pw/view.span,barWidth=Math.max(.5,Math.min(8,dayWidth*.36));
-  g.fillStyle=col('--muted');g.textAlign='left';g.fillText('Flux quotidiens',L,flowTop-5);
-  g.fillStyle=col('--inc');g.fillRect(L+92,flowTop-13,8,8);g.fillText('Revenus',L+104,flowTop-5);
-  g.fillStyle=col('--exp');g.fillRect(L+158,flowTop-13,8,8);g.fillText('Dépenses',L+170,flowTop-5);
+  g.textAlign='left';g.fillStyle=col('--inc');g.fillRect(L,flowTop-13,8,8);g.fillText('Revenus',L+12,flowTop-5);
+  g.fillStyle=col('--exp');g.fillRect(L+72,flowTop-13,8,8);g.fillText('Dépenses',L+84,flowTop-5);
   g.strokeStyle=col('--border');g.beginPath();g.moveTo(L,flowZero);g.lineTo(w-R,flowZero);g.stroke();
   for(var f=a;f<=b;f++){
     var cx=X(f),incomeHeight=pts[f].inc/maxFlow*maxBar,expenseHeight=pts[f].exp/maxFlow*maxBar;
